@@ -7,7 +7,7 @@ export default function HomePage() {
   return (
     <main className="bg-white">
       <h1 className="text-center text-4xl font-bold text-red-500">
-        CI/CD SUCCESS TEST
+        CI/CD SUCCESS TEST!!!
       </h1>
 
       <HeroSection />
