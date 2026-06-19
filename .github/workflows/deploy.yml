@@ -9,7 +9,6 @@ jobs:
 deploy:
 runs-on: ubuntu-latest
 
-```
 steps:
   - name: Deploy through Bastion
     uses: appleboy/ssh-action@v1.0.3
@@ -19,11 +18,10 @@ steps:
       key: ${{ secrets.BASTION_KEY }}
       script: |
         ssh ubuntu@10.0.3.91 << 'EOF'
-          cd /home/ubuntu/apps/furniro-ecommerce-main
-          git pull origin main
-          npm install
-          npm run build
-          pm2 restart furniro || pm2 start npm --name furniro -- start
-          pm2 save
+        cd /home/ubuntu/apps/furniro-ecommerce-main
+        git pull origin main
+        npm install
+        npm run build
+        pm2 restart furniro || pm2 start npm --name furniro -- start
+        pm2 save
         EOF
-```
