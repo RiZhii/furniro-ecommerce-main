@@ -27,10 +27,11 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --parameters commands="[
               'cd /home/ubuntu/apps/furniro-ecommerce-main',
-              'git pull origin main',
               'sudo chown -R ubuntu:ubuntu .next',
+              'git pull origin main',
               'sudo rm -rf .next',
+              "npm install",
               'npm run build',
-              'pm2 restart furniro',
+              'pm2 restart furniro' || pm2 start npm --name furniro -- start",
               'pm2 save'
             ]"
