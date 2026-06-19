@@ -35,7 +35,6 @@ jobs:
             --parameters commands='[
             "cd /home/ubuntu/apps/furniro-ecommerce-main",
             "git pull origin main",
-            "chown -R ubuntu:ubuntu /home/ubuntu/apps/furniro-ecommerce-main",
-            "rm -rf /home/ubuntu/apps/furniro-ecommerce-main/.next",
-            "su - ubuntu -c '\''cd /home/ubuntu/apps/furniro-ecommerce-main && npm install && npm run build && pm2 restart furniro'\''"
+            "whoami",
+            "pwd",
             ]'
