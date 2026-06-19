@@ -18,9 +18,6 @@ jobs:
           username: ${{ secrets.BASTION_USER }}
           key: ${{ secrets.BASTION_KEY }}
           script: |
-            ssh ubuntu@10.0.3.91 << 'EOF'
             whoami
             pwd
-            ls -la /home/ubuntu/apps
-            ls -la /home/ubuntu/apps/furniro-ecommerce-main
             EOF
