@@ -14,8 +14,9 @@ jobs:
         run: aws sts get-caller-identity
 
       - name: Verify Instance ID
-        run: echo "EC2 Instance ID: ${{ secrets.EC2_INSTANCE_ID }}"
-        
+        run: |
+          echo ${{ secrets.EC2_INSTANCE_ID }}
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
