@@ -1,40 +1,37 @@
 name: Deploy Furniro
 
 on:
-push:
-branches:
-- main
+  push:
+    branches:
+      - main
 
 jobs:
-deploy:
-runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-steps:
-  - name: Checkout Repository
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-  - name: Configure AWS Credentials
-    uses: aws-actions/configure-aws-credentials@v4
-    with:
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      aws-region: ${{ secrets.AWS_REGION }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-  - name: Deploy to Private EC2 via SSM
-    run: |
-      aws ssm send-command \
-        --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
-        --document-name "AWS-RunShellScript" \
-        --parameters '{
-          "commands":[
-            "cd /home/ubuntu/apps/furniro-ecommerce-main",
-            "sudo chown -R ubuntu:ubuntu .",
-            "git pull origin main",
-            "rm -rf .next",
-            "npm install",
-            "npm run build",
-            "pm2 restart furniro || pm2 start npm --name furniro -- start",
-            "pm2 save"
-          ]
-        }'
-
+      - name: Deploy to EC2 via SSM
+        run: |
+          aws ssm send-command \
+            --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
+            --document-name "AWS-RunShellScript" \
+            --parameters commands="[
+              'cd /home/ubuntu/apps/furniro-ecommerce-main',
+              'sudo chown -R ubuntu:ubuntu .',
+              'git pull origin main',
+              'rm -rf .next',
+              'npm install',
+              'npm run build',
+              'pm2 restart furniro',
+              'pm2 save'
+            ]"
