@@ -32,10 +32,4 @@ jobs:
           aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
-            --parameters commands="[
-              'cd /home/ubuntu/apps/furniro-ecommerce-main',
-              'git pull origin main',
-              'sudo rm -rf .next',
-              'npm run build',
-              'pm2 restart furniro' ,
-            ]"
+            --parameters commands="hostname","whoami"
