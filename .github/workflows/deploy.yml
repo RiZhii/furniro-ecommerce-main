@@ -18,6 +18,5 @@ jobs:
           username: ${{ secrets.BASTION_USER }}
           key: ${{ secrets.BASTION_KEY }}
           script: |
-            whoami
-            pwd
-            EOF
+            echo "Connected Successfully"
+            hostname
