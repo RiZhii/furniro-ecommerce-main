@@ -1,4 +1,4 @@
-name: Deploy Furniro
+name: Build and Push to ECR
 
 on:
   push:
@@ -6,11 +6,13 @@ on:
       - main
 
 jobs:
-  deploy:
+  docker:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
@@ -20,24 +22,20 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Verify AWS Identity
-        run: aws sts get-caller-identity
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Verify Instance ID
+      - name: Build Docker Image
         run: |
-          echo ${{ secrets.EC2_INSTANCE_ID }}
+          docker build -t furniro-frontend .
 
-      - name: Deploy to EC2 via SSM
+      - name: Tag Image
         run: |
-          aws ssm send-command \
-            --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
-            --document-name "AWS-RunShellScript" \
-            --parameters commands='[
-            "cd /home/ubuntu/apps/furniro-ecommerce-main",
-            "git pull origin main",
-            "sudo chown -R ubuntu:ubuntu .",
-            "sudo rm -rf .next",
-            "npm install ",
-            "npm run build",
-            "pm2 restart furniro",
-            ]'
+          docker tag furniro-frontend:latest \
+          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/furniro-frontend:latest
+
+      - name: Push Image to ECR
+        run: |
+          docker push \
+          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/furniro-frontend:latest
