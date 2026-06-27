@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: furniro-frontend-service
+
+spec:
+
+  type: ClusterIP
+
+  selector:
+    app: furniro-frontend
+
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000

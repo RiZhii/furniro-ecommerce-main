@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: furniro-frontend
+  labels:
+    app: furniro-frontend
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: furniro-frontend
+
+  template:
+    metadata:
+      labels:
+        app: furniro-frontend
+
+    spec:
+      containers:
+      - name: furniro-frontend
+
+        image: 899867382718.dkr.ecr.us-east-1.amazonaws.com/furniro-frontend:latest
+
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 3000
+
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
