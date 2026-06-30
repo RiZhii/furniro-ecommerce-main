@@ -20,27 +20,24 @@ spec:
 
     spec:
       containers:
-      - name: furniro-frontend
+        - name: furniro-frontend
+          image: 899867382718.dkr.ecr.us-east-1.amazonaws.com/furniro-frontend:latest
+          imagePullPolicy: Always
 
-        image: 899867382718.dkr.ecr.us-east-1.amazonaws.com/furniro-frontend:latest
+          ports:
+            - containerPort: 3000
 
-        imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: furniro-config
+            - secretRef:
+                name: furniro-secret
 
-        ports:
-        - containerPort: 3000
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
 
-        envFrom:
-        - configMapRef:
-           name: furniro-config
-
-        - secretRef:
-           name: furniro-secret
-
-        resources:
-          requests:
-            cpu: "250m"
-            memory: "256Mi"
-
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
